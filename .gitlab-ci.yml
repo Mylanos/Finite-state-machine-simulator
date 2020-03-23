@@ -1,0 +1,9 @@
+image: "swift:5.1"
+
+before_script:
+  - swift package resolve
+
+build:
+  script:
+    - swift build
+    - swift test --parallel
