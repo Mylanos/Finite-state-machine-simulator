@@ -8,6 +8,7 @@
 import Foundation
 import FiniteAutomata
 import Simulator
+
 // MARK: - Main
 func main() -> Result<Int, RunError> {
     // *******************
@@ -15,6 +16,7 @@ func main() -> Result<Int, RunError> {
     // *******************
     let location: String
     let inputString: String
+    let automata: FiniteAutomata
     if CommandLine.argc == 3{
         inputString = CommandLine.arguments[1]
         location = CommandLine.arguments[2]
@@ -24,22 +26,22 @@ func main() -> Result<Int, RunError> {
     }
     let path = URL(fileURLWithPath: location)
     guard let fileContent = try? String(contentsOf: path) else{
-        return .failure(.automataDecodingError)
+        return .failure(.fileWorkError)
     }
     let data = fileContent.data(using: .utf8)!
-    let automata: FiniteAutomata
     do{
         automata = try JSONDecoder().decode(FiniteAutomata.self, from: data)
-        try automata.isUndefinedErrors()
-        
-    } catch FiniteAutomataError.UndefinedStatesError{
+        try automata.undefinedErrors()
+        try automata.undeterministicErrors()
+    } catch FiniteAutomataError.undeterministicAutomata{
+        return .failure(.undeterministicAutomata)
+    } catch FiniteAutomataError.undefinedStatesError{
         return .failure(.undefinedStateInAutomata)
-    } catch FiniteAutomataError.UndefinedSymbolsError{
+    } catch FiniteAutomataError.undefinedSymbolsError{
         return .failure(.undefinedSymbolInAutomata)
     } catch{
         return .failure(.automataDecodingError)
     }
-    
     let sim = Simulator(finiteAutomata: automata)
     let result = sim.simulate(on: inputString)
     if result == []{

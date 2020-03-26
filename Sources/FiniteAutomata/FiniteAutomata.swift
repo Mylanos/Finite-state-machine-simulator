@@ -23,30 +23,53 @@ public struct FiniteAutomata {
         self.finalStates = finalStates
     }
     
-    public func isUndefinedErrors() throws  {
+    public func undeterministicErrors() throws {
+        var transitionSymbols: [String] = []
+        var symbolCount: Int = 0
+        for state in states{
+            for transition in transitions{
+                if(state == transition.from){
+                    transitionSymbols.insert(transition.with, at: transitionSymbols.endIndex)
+                }
+            }
+            if transitionSymbols.count > 1{
+                for symbol in transitionSymbols{
+                    transitionSymbols.forEach{ x in if x == symbol { symbolCount += 1}}
+                    if(symbolCount > 1){
+                        throw FiniteAutomataError.undeterministicAutomata
+                    }
+                    symbolCount = 0
+                }
+            }
+            transitionSymbols.removeAll()
+        }
+    }
+    
+    public func undefinedErrors() throws  {
         for finalState in finalStates {
             if !states.contains(finalState) {
-                throw FiniteAutomataError.UndefinedStatesError
+                throw FiniteAutomataError.undefinedStatesError
             }
         }
         for transition in transitions {
             if !states.contains(transition.from) ||
                 !states.contains(transition.to) {
-                throw FiniteAutomataError.UndefinedStatesError
+                throw FiniteAutomataError.undefinedStatesError
             }
             if !symbols.contains(transition.with){
-                throw FiniteAutomataError.UndefinedSymbolsError
+                throw FiniteAutomataError.undefinedSymbolsError
             }
         }
         if !states.contains(initialState){
-            throw FiniteAutomataError.UndefinedStatesError
+            throw FiniteAutomataError.undefinedStatesError
         }
     }
 }
 
 public enum FiniteAutomataError: Error {
-    case UndefinedStatesError
-    case UndefinedSymbolsError
+    case undefinedStatesError
+    case undefinedSymbolsError
+    case undeterministicAutomata
 }
 
 struct FiniteAutomataRaw: Decodable {
