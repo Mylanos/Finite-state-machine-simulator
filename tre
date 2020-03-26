@@ -1,1 +1,38 @@
-fdhdfdsad
+{
+  "states" : [
+    "C",
+    "A",
+    "B"
+  ],
+  "symbols" : [
+    "c",
+    "a",
+    "b"
+  ],
+  "transitions" : [
+    {
+      "with" : "c",
+      "to" : "B",
+      "from" : "C"
+    },
+    {
+      "with" : "b",
+      "to" : "B",
+      "from" : "B"
+    },
+    {
+      "with" : "c",
+      "to" : "C",
+      "from" : "A"
+    },
+    {
+      "with" : "a",
+      "to" : "A",
+      "from" : "A"
+    }
+  ],
+  "initialState" : "B",
+  "finalStates" : [
+    "B", "A"
+  ]
+}

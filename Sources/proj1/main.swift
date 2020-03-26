@@ -6,13 +6,47 @@
 //
 
 import Foundation
-
+import FiniteAutomata
+import Simulator
 // MARK: - Main
-func main() -> Result<Void, RunError> {
+func main() -> Result<Int, RunError> {
     // *******************
     // * NOT IMPLEMENTED *
     // *******************
-    return .failure(.stringNotAccepted)
+    let location: String
+    let inputString: String
+    if CommandLine.argc == 3{
+        inputString = CommandLine.arguments[1]
+        location = CommandLine.arguments[2]
+    }
+    else{
+        return .failure(.wrongArguments)
+    }
+    let path = URL(fileURLWithPath: location)
+    guard let fileContent = try? String(contentsOf: path) else{
+        return .failure(.automataDecodingError)
+    }
+    let data = fileContent.data(using: .utf8)!
+    let automata: FiniteAutomata
+    do{
+        automata = try JSONDecoder().decode(FiniteAutomata.self, from: data)
+        try automata.isUndefinedErrors()
+        
+    } catch FiniteAutomataError.UndefinedStatesError{
+        return .failure(.undefinedStateInAutomata)
+    } catch FiniteAutomataError.UndefinedSymbolsError{
+        return .failure(.undefinedSymbolInAutomata)
+    } catch{
+        return .failure(.automataDecodingError)
+    }
+    
+    let sim = Simulator(finiteAutomata: automata)
+    let result = sim.simulate(on: inputString)
+    if result == []{
+        return .failure(.stringNotAccepted)
+    }
+    result.forEach{ print($0) }
+    return .success(0)
 }
 
 // MARK: - program body

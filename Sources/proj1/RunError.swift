@@ -5,7 +5,7 @@
 //  Created by Filip Klembara on 17/02/2020.
 //
 
-enum RunError: Error {
+public enum RunError: Error {
     // *******************
     // * NOT IMPLEMENTED *
     // *******************
@@ -45,7 +45,7 @@ extension RunError {
 
 // MARK:- Description of error
 extension RunError: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
         case .stringNotAccepted:
             return "String was not accepted by the automata!"
