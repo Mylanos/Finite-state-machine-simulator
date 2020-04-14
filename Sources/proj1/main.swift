@@ -11,9 +11,6 @@ import Simulator
 
 // MARK: - Main
 func main() -> Result<Int, RunError> {
-    // *******************
-    // * NOT IMPLEMENTED *
-    // *******************
     let location: String
     let inputString: String
     let automata: FiniteAutomata
@@ -44,7 +41,7 @@ func main() -> Result<Int, RunError> {
     }
     let sim = Simulator(finiteAutomata: automata)
     let result = sim.simulate(on: inputString)
-    if result == []{
+    if result.isEmpty{
         return .failure(.stringNotAccepted)
     }
     result.forEach{ print($0) }

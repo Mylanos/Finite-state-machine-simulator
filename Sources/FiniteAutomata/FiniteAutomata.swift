@@ -13,15 +13,6 @@ public struct FiniteAutomata {
     public var initialState: String
     public var transitions: [Transition]
     public var finalStates: [String]
-
-
-    init(states: [String], symbols: [String], initialState: String, finalStates: [String], transitions: [Transition]) {
-        self.states = states
-        self.symbols = symbols
-        self.transitions = transitions
-        self.initialState = initialState
-        self.finalStates = finalStates
-    }
     
     public func undeterministicErrors() throws {
         var transitionSymbols: [String] = []
@@ -72,14 +63,6 @@ public enum FiniteAutomataError: Error {
     case undeterministicAutomata
 }
 
-struct FiniteAutomataRaw: Decodable {
-    var states: [String]
-    var symbols: [String]
-    var initialState: String
-    var transitions: [Transition]
-    var finalStates: [String]
-}
-
 public struct Transition: Decodable {
     public var with: String
     public var to: String
@@ -88,15 +71,5 @@ public struct Transition: Decodable {
 
 extension FiniteAutomata: Decodable {
 
-    public init(from decoder: Decoder) throws {
-        let finiteAutomata = try FiniteAutomataRaw(from: decoder)
-        let states = finiteAutomata.states
-        let symbols = finiteAutomata.symbols
-        let transitions = finiteAutomata.transitions
-        let initialState = finiteAutomata.initialState
-        let finalStates = finiteAutomata.finalStates
-
-
-        self.init(states: states, symbols: symbols, initialState: initialState, finalStates: finalStates, transitions: transitions) // initializing our struct
-    }
+    
 }

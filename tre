@@ -7,7 +7,7 @@
   "symbols" : [
     "c",
     "a",
-    "b"
+    "b",
   ],
   "transitions" : [
     {
@@ -29,10 +29,15 @@
       "with" : "a",
       "to" : "A",
       "from" : "A"
+    },
+    {
+      "with" : "c",
+      "to" : "A",
+      "from" : "B"
     }
   ],
   "initialState" : "B",
   "finalStates" : [
-    "B", "A"
+    "B"
   ]
 }

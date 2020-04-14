@@ -33,13 +33,12 @@ public struct Simulator {
     ///     otherwise array of states
     public func simulate(on string: String) -> [String] {
         // checkUndefinedErrors()
-        let stringSymbols = string.components(separatedBy: ",")
+        let stringSymbols = string.split(separator: ",")
         var currentState = finiteAutomata.initialState
         let finalStates = finiteAutomata.finalStates
         var accepted: [String] = [finiteAutomata.initialState]
-        
         for actualSymbol in stringSymbols {
-            let nextState = getNextState(actualSymbol: actualSymbol, actualState: currentState)
+            let nextState = getNextState(actualSymbol: String(actualSymbol), actualState: currentState)
             if !nextState.isEmpty{
                 currentState = nextState
                 accepted.insert(currentState, at: accepted.endIndex)
